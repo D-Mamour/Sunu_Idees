@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sunu-Idées</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>💡 Sunu-Idées</h1>
+      <p>Tableau collaboratif de la Promo P9</p>
+    </header>
+
+    <main>
+      <!-- FORMULAIRE -->
+
+      <section class="form-section">
+        <h2>Proposer une idée</h2>
+
+        <form id="ideaForm">
+          <!-- TITRE -->
+
+          <div class="form-group">
+            <label for="title"> Titre de l'idée </label>
+
+            <input
+              type="text"
+              id="title"
+              placeholder="Ex : Organiser un événement sportif"
+            />
+            <small id="titleError" class="error-message"> </small>
+          </div>
+
+          <!-- DESCRIPTION -->
+
+          <div class="form-group">
+            <label for="description"> Description </label>
+
+            <textarea
+              id="description"
+              placeholder="Décrivez votre idée..."
+            ></textarea>
+
+            <small id="descriptionError" class="error-message"> </small>
+          </div>
+
+          <!-- MESSAGE GLOBAL -->
+
+          <div id="formMessage" class="form-message"></div>
+
+          <!-- BOUTON -->
+
+          <button type="submit" id="submitBtn">Ajouter l'idée</button>
+        </form>
+      </section>
+
+      <!-- MUR DES IDEES -->
+
+      <section class="ideas-section">
+        <h2>Mur des idées</h2>
+
+        <div id="ideasContainer"></div>
+      </section>
+      <div id="deleteConfirmation" class="delete-confirmation hidden">
+        <p>Voulez-vous vraiment supprimer cette idée ?</p>
+
+        <div class="confirmation-buttons">
+          <button id="confirmDelete">Oui</button>
+          <button id="cancelDelete">Non</button>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/superbase.js"></script>
+    <script src="js/utilisateur.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
