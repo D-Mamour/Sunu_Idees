@@ -1,18 +1,24 @@
+import { removeIdea, editIdea} from "./script.js";
+import { getIdeas, addIdea, updateIdea, deleteIdea } from "./superbase.js";
+
+window.removeIdea = removeIdea;
+window.editIdea = editIdea;
+
 const ideasContainer = document.getElementById("ideasContainer");
 const formMessage = document.getElementById("formMessage");
 
-function showMessage(message, type) {
+export function showMessage(message, type) {
   formMessage.textContent = message;
   formMessage.className = "form-message";
   formMessage.classList.add(type);
 }
 
-function clearMessage() {
+export function clearMessage() {
   formMessage.textContent = "";
   formMessage.className = "form-message";
 }
 
-function displayIdeas(ideas) {
+export function displayIdeas(ideas) {
   ideasContainer.innerHTML = "";
 
   if (ideas.length === 0) {
@@ -75,7 +81,7 @@ function displayIdeas(ideas) {
   });
 }
 
-function getCategory(category) {
+export function getCategory(category) {
   if (category === "Pédagogie") {
     return "pedagogie";
   }
@@ -90,3 +96,4 @@ function getCategory(category) {
 
   return "technique";
 }
+

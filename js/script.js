@@ -1,3 +1,10 @@
+import { showMessage, clearMessage } from "./utilisateur.js";
+import { getIdeas, addIdea, updateIdea, deleteIdea } from "./superbase.js";
+import { cleanCategory } from "./ai.js";
+import { displayIdeas } from "./utilisateur.js";
+import { getCategory } from "./utilisateur.js";
+
+
 const form = document.getElementById("ideaForm");
 const titleInput = document.getElementById("title");
 const descriptionInput = document.getElementById("description");
@@ -6,11 +13,11 @@ const titleError = document.getElementById("titleError");
 const descriptionError = document.getElementById("descriptionError");
 let editingId = null;
 let ideaToDelete = null;
-function sanitize(text) {
+export function sanitize(text) {
   return text.trim().replace(/</g, "").replace(/>/g, "");
 }
 
-function clearErrors() {
+export function clearErrors() {
   titleError.textContent = "";
   descriptionError.textContent = "";
 
@@ -18,7 +25,7 @@ function clearErrors() {
   descriptionInput.classList.remove("input-error");
 }
 
-function validateForm(title, description) {
+export function validateForm(title, description) {
   clearErrors();
 
   let isValid = true;
@@ -42,7 +49,7 @@ function validateForm(title, description) {
   return isValid;
 }
 
-async function loadIdeas() {
+export async function loadIdeas() {
   try {
     const ideas = await getIdeas();
 
@@ -76,7 +83,7 @@ form.addEventListener("submit", async function (event) {
   let category;
 
   try {
-    category = await (title, description);
+    category = await cleanCategory(title, description);
   } catch (error) {
     console.error(error);
 
@@ -95,36 +102,30 @@ form.addEventListener("submit", async function (event) {
   //   await loadIdeas();
 
   //   showMessage("Idée ajoutée avec succès.", "success");
-  // } 
-try {
-  if (editingId) {
-    await updateIdea(
-      editingId,
-      title,
-      description
-    );
+  // }
+  try {
+    if (editingId) {
+      await updateIdea(editingId, title, description);
 
-    showMessage("Idée modifiée avec succès.", "success");
+      showMessage("Idée modifiée avec succès.", "success");
 
-    editingId = null;
+      editingId = null;
 
-    submitBtn.textContent = "Ajouter une idée";
-  } else {
-    await addIdea({
-      titre: title,
-      categorie: category,
-      description: description,
-    });
+      submitBtn.textContent = "Ajouter une idée";
+    } else {
+      await addIdea({
+        titre: title,
+        categorie: category,
+        description: description,
+      });
 
-    showMessage("Idée ajoutée avec succès.", "success");
-  }
+      showMessage("Idée ajoutée avec succès.", "success");
+    }
 
-  form.reset();
+    form.reset();
 
-  await loadIdeas();
-}
-  
-  catch (error) {
+    await loadIdeas();
+  } catch (error) {
     console.error(error);
 
     showMessage("Erreur lors de l'enregistrement.", "error");
@@ -133,14 +134,12 @@ try {
   submitBtn.disabled = false;
 });
 
-// 
+//
 
-function removeIdea(id) {
+export function removeIdea(id) {
   ideaToDelete = id;
 
-  document
-    .getElementById("deleteConfirmation")
-    .classList.remove("hidden");
+  document.getElementById("deleteConfirmation").classList.remove("hidden");
 }
 
 // async function editIdea(id) {
@@ -168,7 +167,7 @@ function removeIdea(id) {
 //     showMessage("Erreur lors de la modification.", "error");
 //   }
 // }
-async function editIdea(id) {
+export async function editIdea(id) {
   try {
     const ideas = await getIdeas();
 
@@ -192,35 +191,27 @@ async function editIdea(id) {
     showMessage("Erreur lors du chargement de l'idée.", "error");
   }
 }
-document
-  .getElementById("confirmDelete")
-  .addEventListener("click", async () => {
-    try {
-      await deleteIdea(ideaToDelete);
+document.getElementById("confirmDelete").addEventListener("click", async () => {
+  try {
+    await deleteIdea(ideaToDelete);
 
-      await loadIdeas();
+    await loadIdeas();
 
-      showMessage("Idée supprimée avec succès.", "success");
-    } catch (error) {
-      console.error(error);
+    showMessage("Idée supprimée avec succès.", "success");
+  } catch (error) {
+    console.error(error);
 
-      showMessage("Erreur lors de la suppression.", "error");
-    }
+    showMessage("Erreur lors de la suppression.", "error");
+  }
 
-    document
-      .getElementById("deleteConfirmation")
-      .classList.add("hidden");
+  document.getElementById("deleteConfirmation").classList.add("hidden");
 
-    ideaToDelete = null;
-  });
+  ideaToDelete = null;
+});
 
-document
-  .getElementById("cancelDelete")
-  .addEventListener("click", () => {
-    document
-      .getElementById("deleteConfirmation")
-      .classList.add("hidden");
+document.getElementById("cancelDelete").addEventListener("click", () => {
+  document.getElementById("deleteConfirmation").classList.add("hidden");
 
-    ideaToDelete = null;
-  });
+  ideaToDelete = null;
+});
 document.addEventListener("DOMContentLoaded", loadIdeas);

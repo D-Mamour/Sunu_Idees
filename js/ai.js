@@ -1,4 +1,7 @@
-async function cleanCategory(title, description) {
+const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
+
+
+export async function cleanCategory(title, description) {
   const text = `${title} ${description}`.toLowerCase();
 
   // Vérification locale rapide
@@ -20,9 +23,9 @@ async function cleanCategory(title, description) {
 
   // Prompt IA
   const prompt = `
-Tu es un classificateur.
+Tu es un validateur.
 
-Tu dois choisir UNE SEULE catégorie parmi :
+Catégories possibles :
 
 - Pédagogie
 - Événement
@@ -35,7 +38,13 @@ ${title}
 Description :
 ${description}
 
-Réponds uniquement par le nom exact de la catégorie.
+Si le texte est incohérent, incompréhensible ou aléatoire,
+réponds uniquement :
+
+INVALIDE
+
+Sinon réponds uniquement par le nom exact
+de la catégorie.
 `;
 
   try {
@@ -48,10 +57,10 @@ Réponds uniquement par le nom exact de la catégorie.
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "nvidia/nemotron-3-super-120b-a12b:free",
+          model: "nvidia/nemotron-3-ultra-550b-a55b:free",
           messages: [
             {
-              role: "user",
+              role: "system",
               content: prompt,
             },
           ],

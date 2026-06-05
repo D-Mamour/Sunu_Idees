@@ -1,6 +1,8 @@
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-async function addIdea(idea) {
+export async function addIdea(idea) {
   const { error } = await supabaseClient.from("idees").insert([idea]);
 
   if (error) {
@@ -8,7 +10,7 @@ async function addIdea(idea) {
   }
 }
 
-async function getIdeas() {
+export async function getIdeas() {
   const { data, error } = await supabaseClient
     .from("idees")
     .select("*")
@@ -23,7 +25,7 @@ async function getIdeas() {
   return data;
 }
 
-async function updateIdea(id, titre, description) {
+export async function updateIdea(id, titre, description) {
   const { error } = await supabaseClient
     .from("idees")
     .update({
@@ -37,7 +39,7 @@ async function updateIdea(id, titre, description) {
   }
 }
 
-async function deleteIdea(id) {
+export async function deleteIdea(id) {
   const { error } = await supabaseClient.from("idees").delete().eq("id", id);
 
   if (error) {
